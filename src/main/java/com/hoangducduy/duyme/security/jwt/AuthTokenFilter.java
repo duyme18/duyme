@@ -1,4 +1,4 @@
-package com.hoangducduy.duyme.config;
+package com.hoangducduy.duyme.security.jwt;
 
 import java.io.IOException;
 
@@ -17,12 +17,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.hoangducduy.duyme.common.JwtUtils;
-import com.hoangducduy.duyme.services.UserDetailsServiceImpl;
+import com.hoangducduy.duyme.security.services.UserDetailsServiceImpl;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
-
-	private static final Logger Logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 
 	@Autowired
 	private JwtUtils jwtUtils;
@@ -30,25 +27,27 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
 
+	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-
 		try {
 			String jwt = parseJwt(request);
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
 				String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null,
-						userDetails.getAuthorities());
-				auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
+				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-				SecurityContextHolder.getContext().setAuthentication(auth);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		} catch (Exception e) {
-			Logger.error("Cannot set user authentication: {}", e);
+			logger.error("Cannot set user authentication: {}", e);
 		}
+
 		filterChain.doFilter(request, response);
 	}
 
@@ -61,5 +60,4 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 		return null;
 	}
-
 }

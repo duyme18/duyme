@@ -19,17 +19,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hoangducduy.duyme.common.ERole;
-import com.hoangducduy.duyme.common.JwtUtils;
-import com.hoangducduy.duyme.dto.JwtResponse;
-import com.hoangducduy.duyme.dto.LoginRequest;
-import com.hoangducduy.duyme.dto.MessageResponse;
-import com.hoangducduy.duyme.dto.SignupRequest;
-import com.hoangducduy.duyme.entities.Role;
-import com.hoangducduy.duyme.entities.User;
-import com.hoangducduy.duyme.repositories.RoleRepository;
-import com.hoangducduy.duyme.repositories.UserRepository;
-import com.hoangducduy.duyme.services.UserDetailsImpl;
+import com.hoangducduy.duyme.models.ERole;
+import com.hoangducduy.duyme.models.Role;
+import com.hoangducduy.duyme.models.User;
+import com.hoangducduy.duyme.payload.request.LoginRequest;
+import com.hoangducduy.duyme.payload.request.SignupRequest;
+import com.hoangducduy.duyme.payload.response.JwtResponse;
+import com.hoangducduy.duyme.payload.response.MessageResponse;
+import com.hoangducduy.duyme.repository.UserRepository;
+import com.hoangducduy.duyme.security.services.UserDetailsImpl;
+import com.hoangducduy.duyme.repository.RoleRepository;
+import com.hoangducduy.duyme.security.jwt.JwtUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

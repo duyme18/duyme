@@ -1,4 +1,4 @@
-package com.hoangducduy.duyme.config;
+package com.hoangducduy.duyme.security.jwt;
 
 import java.io.IOException;
 
@@ -15,14 +15,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
-	private static final Logger Logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
-		
-		Logger.error("Unauthorized error: {}", authException.getMessage());
-		//HttpServletResponse.SC_UNAUTHORIZED chính là 401, cho biết yêu cầu cần xác thực
+		logger.error("Unauthorized error: {}", authException.getMessage());
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
 	}
 
