@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import lombok.Data;
 
@@ -33,6 +35,10 @@ public class Librarian {
 	
 	@Column(name = "phone")
 	private String phone;
+	
+	@NotBlank
+	@Size(max = 20)
+	private String identification;
 	
 	@OneToMany(targetEntity = BorrowBook.class)
 	private List<BorrowBook> borrowBooks;
