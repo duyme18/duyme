@@ -1,4 +1,4 @@
-package com.hoangducduy.duyme.controllers;
+package com.hoangducduy.duyme.controller;
 
 import java.util.HashSet;
 import java.util.List;
@@ -27,9 +27,9 @@ import com.hoangducduy.duyme.payload.request.SignupRequest;
 import com.hoangducduy.duyme.payload.response.JwtResponse;
 import com.hoangducduy.duyme.payload.response.MessageResponse;
 import com.hoangducduy.duyme.repository.UserRepository;
-import com.hoangducduy.duyme.security.services.UserDetailsImpl;
 import com.hoangducduy.duyme.repository.RoleRepository;
 import com.hoangducduy.duyme.security.jwt.JwtUtils;
+import com.hoangducduy.duyme.security.service.impl.UserDetailsImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.hoangducduy.duyme.security.jwt.AuthEntryPointJwt;
 import com.hoangducduy.duyme.security.jwt.AuthTokenFilter;
-import com.hoangducduy.duyme.security.services.UserDetailsServiceImpl;
+import com.hoangducduy.duyme.security.service.impl.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity

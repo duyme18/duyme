@@ -1,4 +1,4 @@
-package com.hoangducduy.duyme.controllers;
+package com.hoangducduy.duyme.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,12 +49,6 @@ public class UserController {
 		user.setUsername(userDetails.getUsername());
 		user.setEmail(userDetails.getEmail());
 		user.setPassword(userDetails.getPassword());
-		user.setAddress(userDetails.getAddress());
-		user.setSex(userDetails.getSex());
-		user.setPhone(userDetails.getPhone());
-		user.setBirthday(userDetails.getBirthday());
-		user.setJob(userDetails.getJob());
-		user.setPicture(userDetails.getPicture());
 		user.setRoles(userDetails.getRoles());
 
 		final User upadteUser = userRepository.save(user);

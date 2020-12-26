@@ -1,4 +1,4 @@
-package com.hoangducduy.duyme.security.services;
+package com.hoangducduy.duyme.security.service.impl;
 
 import java.util.Collection;
 import java.util.List;

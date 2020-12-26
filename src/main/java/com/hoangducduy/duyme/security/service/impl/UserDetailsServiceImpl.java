@@ -1,4 +1,4 @@
-package com.hoangducduy.duyme.security.services;
+package com.hoangducduy.duyme.security.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
