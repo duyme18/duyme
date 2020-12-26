@@ -22,7 +22,7 @@ public class Book {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long BookId;
+	private Long bookId;
 
 	@Column(name = "book_name")
 	private String bookName;
@@ -30,11 +30,8 @@ public class Book {
 	@Column(name = "translator")
 	private String translator;
 
-	@Column(name = "amount_book")
-	private Integer amountBook;
-
-	@Column(name = "book_picture")
-	private String bookPicture;
+	@Column(name = "book_amount")
+	private Integer bookAmount;
 
 	@Column(name = "publishing_year")
 	private LocalDate publishingYear;
@@ -53,4 +50,8 @@ public class Book {
 	@ManyToOne
 	@JoinColumn(name = "book_publishing_company")
 	private PublishingCompany publishingCompany;
+	
+	public Book() {
+		
+	}
 }
