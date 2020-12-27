@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -35,10 +37,14 @@ public class Comment {
 
 
     @ManyToOne
-    @JoinColumn(name = "book_comment")
+    @JoinColumn(name = "book_id")
+    @EqualsAndHashCode.Exclude
+	@ToString.Exclude
     private Book book;
     
 	@ManyToOne
-	@JoinColumn(name = "user_comment")
+	@JoinColumn(name = "user_id")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	private User user;
 }

@@ -1,7 +1,8 @@
 package com.hoangducduy.duyme.models;
 
-import java.util.List;
+import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,6 @@ public class PublishingCompany {
 	private String email;
 	private String informationRepresentative;
 
-	@OneToMany(targetEntity = Book.class)
-	private List<Book> books;
+	@OneToMany(mappedBy = "publishingCompany", cascade = CascadeType.ALL)
+	private Collection<Book> books;
 }

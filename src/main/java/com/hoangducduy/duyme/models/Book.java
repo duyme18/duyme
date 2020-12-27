@@ -1,8 +1,9 @@
 package com.hoangducduy.duyme.models;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -32,23 +35,34 @@ public class Book {
 
 	@Column(name = "book_amount")
 	private Integer bookAmount;
+	
+	@Column(name = "rent_const")
+	private Double rentConst;
 
 	@Column(name = "publishing_year")
 	private LocalDate publishingYear;
 
-	@OneToMany(targetEntity = Comment.class)
-	private List<Comment> comments;
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private Collection<Comment> comments;
 
 	@ManyToOne
-	@JoinColumn(name = "book_category_book")
+	@JoinColumn(name="category_book_id")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	private CategoryBook categoryBook;
 
 	@ManyToOne
-	@JoinColumn(name = "book_author")
+	@JoinColumn(name="author_id")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	private Author author;
 
 	@ManyToOne
-	@JoinColumn(name = "book_publishing_company")
+	@JoinColumn(name = "publishing_company_id")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	private PublishingCompany publishingCompany;
 	
 	public Book() {

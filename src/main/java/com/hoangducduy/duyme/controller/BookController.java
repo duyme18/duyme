@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,10 +48,45 @@ public class BookController {
 	@PostMapping("book")
 	public ResponseEntity<Book> addBook(@RequestBody Book book) {
 
-		Book book1 = book;
-		
-		bookRepository.save(book1);
-		return new ResponseEntity<>(book1, HttpStatus.CREATED);
+		bookRepository.save(book);
+		return new ResponseEntity<>(book, HttpStatus.CREATED);
+
 	}
 
+	@PutMapping("book/{id}")
+	public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
+		Optional<Book> currentBook = bookRepository.findById(id);
+
+		if (currentBook.isPresent()) {
+			currentBook.get().setBookId(book.getBookId());
+			currentBook.get().setBookName(book.getBookName());
+			currentBook.get().setTranslator(book.getTranslator());
+			currentBook.get().setBookAmount(book.getBookAmount());
+			currentBook.get().setPublishingYear(book.getPublishingYear());
+			currentBook.get().setCategoryBook(book.getCategoryBook());
+			currentBook.get().setAuthor(book.getAuthor());
+			currentBook.get().setPublishingCompany(book.getPublishingCompany());
+
+			bookRepository.save(currentBook.get());
+
+			return new ResponseEntity<>(currentBook.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@DeleteMapping("book/{id}")
+	public ResponseEntity<Book> deleteBook(@PathVariable Long id) {
+
+		Optional<Book> book = bookRepository.findById(id);
+
+		if (book.isPresent()) {
+			bookRepository.deleteById(id);
+
+			return new ResponseEntity<>(book.get(), HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+	}
 }
