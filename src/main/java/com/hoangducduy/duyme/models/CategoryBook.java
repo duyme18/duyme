@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -26,7 +28,8 @@ public class CategoryBook {
 
 	@Column(name = "category_name")
 	private String categoryName;
-
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "categoryBook", cascade = CascadeType.ALL)
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude

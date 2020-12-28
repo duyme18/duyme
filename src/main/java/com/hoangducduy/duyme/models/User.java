@@ -1,9 +1,10 @@
 package com.hoangducduy.duyme.models;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -44,11 +47,15 @@ public class User {
 	@Size(max = 120)
 	private String password;
 
-	@OneToMany(targetEntity = Comment.class)
-	private List<Comment> comments;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private Collection<Comment> comments;
 
-	@OneToMany(targetEntity = BorrowBook.class)
-	private List<BorrowBook> borrowBooks;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private Collection<BorrowBook> borrowBooks;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

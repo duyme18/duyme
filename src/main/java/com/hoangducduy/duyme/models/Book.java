@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -42,6 +44,7 @@ public class Book {
 	@Column(name = "publishing_year")
 	private LocalDate publishingYear;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
