@@ -64,7 +64,6 @@ public class AuthorController {
 		Optional<Author> currentAuthor = authorService.findById(id);
 
 		if (currentAuthor.isPresent()) {
-			currentAuthor.get().setAuthorId(author.getAuthorId());
 			currentAuthor.get().setAuthorName(author.getAuthorName());
 			authorService.save(currentAuthor.get());
 			return new ResponseEntity<>(currentAuthor.get(), HttpStatus.OK);
