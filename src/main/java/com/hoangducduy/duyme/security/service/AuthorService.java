@@ -14,4 +14,5 @@ public interface AuthorService {
 	
 	void save(Author author);
 	
+	Iterable<Author> findByAuthorName(String authorName);
 }

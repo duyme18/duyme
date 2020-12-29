@@ -1,5 +1,6 @@
 package com.hoangducduy.duyme.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,5 +86,24 @@ public class AuthorController {
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
+	}
+	
+	@PostMapping("author/search/{authorName}")
+	public ResponseEntity<?> getAuthorByAuthorName(@PathVariable String authorName){
+		
+		List<Author> authors= (List<Author>) authorService.findAll();
+		
+		List<Author> authors1  = new ArrayList<Author>();
+		
+		for(Author author : authors) {
+			if(author.getAuthorName().contains(authorName)) {
+				authors1.add(author);
+			}
+		}
+		return new ResponseEntity<>(authors1, HttpStatus.OK); 
+//		List<Author> authors = (List<Author>) authorService.findByAuthorName(authorRequest.getAuthorName());
+//				
+//		return new ResponseEntity<>(authors, HttpStatus.OK);
+		
 	}
 }

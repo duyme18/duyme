@@ -35,4 +35,9 @@ public class AuthorServiceImpl implements AuthorService {
 		authorRepository.save(author);
 	}
 
+	@Override
+	public Iterable<Author> findByAuthorName(String authorName) {
+		return authorRepository.findByAuthorName(authorName);
+	}
+
 }
