@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hoangducduy.duyme.models.Author;
@@ -88,8 +89,8 @@ public class AuthorController {
 
 	}
 	
-	@PostMapping("author/search/{authorName}")
-	public ResponseEntity<?> getAuthorByAuthorName(@PathVariable String authorName){
+	@GetMapping("author/search")
+	public ResponseEntity<?> getAuthorByAuthorName(@RequestParam(value="authorName") String authorName){
 		
 		List<Author> authors= (List<Author>) authorService.findAll();
 		
@@ -101,9 +102,6 @@ public class AuthorController {
 			}
 		}
 		return new ResponseEntity<>(authors1, HttpStatus.OK); 
-//		List<Author> authors = (List<Author>) authorService.findByAuthorName(authorRequest.getAuthorName());
-//				
-//		return new ResponseEntity<>(authors, HttpStatus.OK);
 		
 	}
 }
