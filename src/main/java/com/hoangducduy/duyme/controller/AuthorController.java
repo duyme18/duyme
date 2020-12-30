@@ -1,8 +1,11 @@
 package com.hoangducduy.duyme.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hoangducduy.duyme.exception.ResourceNotFoundException;
 import com.hoangducduy.duyme.models.Author;
-import com.hoangducduy.duyme.security.service.AuthorService;
+import com.hoangducduy.duyme.repository.AuthorRepository;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -27,81 +31,70 @@ import com.hoangducduy.duyme.security.service.AuthorService;
 public class AuthorController {
 
 	@Autowired
-	private AuthorService authorService;
+	private AuthorRepository authorRepository;
 
 	@GetMapping("authors")
-	public ResponseEntity<List<Author>> getAllAuthors() {
+	public List<Author> getAllAuthors() {
 
-		List<Author> authors = (List<Author>) authorService.findAll();
-
-		if (authors.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-
-		return new ResponseEntity<>(authors, HttpStatus.OK);
+		return authorRepository.findAll();
 	}
 
 	@GetMapping("author/{id}")
-	public ResponseEntity<Author> getAuthorById(@PathVariable Long id) {
+	public ResponseEntity<Author> getAuthorById(@PathVariable Long id) throws ResourceNotFoundException {
 
-		Optional<Author> author = authorService.findById(id);
+		Author author = authorRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Author not found for this id :: " + id));
 
-		if (author.isPresent()) {
-			return new ResponseEntity<>(author.get(), HttpStatus.OK);
-		}
-
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return ResponseEntity.ok().body(author);
 	}
 
 	@PostMapping("author")
-	public ResponseEntity<Author> addAuthor(@RequestBody Author author) {
+	public Author addAuthor(@Valid @RequestBody Author author) {
 
-		authorService.save(author);
-		return new ResponseEntity<>(author, HttpStatus.CREATED);
-
+		return authorRepository.save(author);
+		
 	}
 
 	@PutMapping("author/{id}")
-	public ResponseEntity<Author> updateAuhor(@PathVariable Long id, @RequestBody Author author) {
-		Optional<Author> currentAuthor = authorService.findById(id);
+	public ResponseEntity<Author> updateAuhor(@PathVariable Long id, @Valid @RequestBody Author authorDetails)
+			throws ResourceNotFoundException {
+		Author author = authorRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Author not found for this id :: " + id));
 
-		if (currentAuthor.isPresent()) {
-			currentAuthor.get().setAuthorName(author.getAuthorName());
-			authorService.save(currentAuthor.get());
-			return new ResponseEntity<>(currentAuthor.get(), HttpStatus.OK);
-		}
+		author.setAuthorName(authorDetails.getAuthorName());
+		final Author updateAuthor = authorRepository.save(author);
+		return ResponseEntity.ok(updateAuthor);
 
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 	@DeleteMapping("author/{id}")
-	public ResponseEntity<Author> deleteAuthor(@PathVariable Long id) {
+	public Map<String, Boolean> deleteAuthor(@PathVariable Long id) throws ResourceNotFoundException {
 
-		Optional<Author> author = authorService.findById(id);
-
-		if (author.isPresent()) {
-			authorService.remove(id);
-
-			return new ResponseEntity<>(author.get(), HttpStatus.OK);
-		}
-
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		Author author = authorRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Author not found for this id :: " + id));
+		
+		authorRepository.delete(author);
+		
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		
+		return response;
 
 	}
-	
+
 	@GetMapping("author/search")
-	public ResponseEntity<?> getAuthorByAuthorName(@RequestParam(value="authorName") String authorName){
-		
-		List<Author> authors= (List<Author>) authorService.findAll();
-		
-		List<Author> authors1  = new ArrayList<Author>();
-		
-		for(Author author : authors) {
-			if(author.getAuthorName().contains(authorName)) {
+	public ResponseEntity<?> getAuthorByAuthorName(@RequestParam(value = "authorName") String authorName) {
+
+		List<Author> authors = (List<Author>) authorRepository.findAll();
+
+		List<Author> authors1 = new ArrayList<Author>();
+
+		for (Author author : authors) {
+			if (author.getAuthorName().contains(authorName)) {
 				authors1.add(author);
 			}
 		}
-		return new ResponseEntity<>(authors1, HttpStatus.OK); 
-		
+		return new ResponseEntity<>(authors1, HttpStatus.OK);
+
 	}
 }
