@@ -36,4 +36,8 @@ public class Author {
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private Collection<Book> books;
+
+	public Author() {
+
+	}
 }

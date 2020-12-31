@@ -37,7 +37,7 @@ public class Book {
 
 	@Column(name = "book_amount")
 	private Integer bookAmount;
-	
+
 	@Column(name = "rent_const")
 	private Double rentConst;
 
@@ -51,13 +51,13 @@ public class Book {
 	private Collection<Comment> comments;
 
 	@ManyToOne
-	@JoinColumn(name="category_book_id")
+	@JoinColumn(name = "category_book_id")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private CategoryBook categoryBook;
 
 	@ManyToOne
-	@JoinColumn(name="author_id")
+	@JoinColumn(name = "author_id")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private Author author;
@@ -67,8 +67,9 @@ public class Book {
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private PublishingCompany publishingCompany;
-	
+
 	public Book() {
-		
+
 	}
+
 }
