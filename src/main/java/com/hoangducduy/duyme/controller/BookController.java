@@ -57,7 +57,7 @@ public class BookController {
 	}
 
 	@PutMapping("book/{id}")
-	public ResponseEntity<Book> updateBook(@PathVariable Long id,@Valid @RequestBody Book bookDetails)
+	public ResponseEntity<Book> updateBook(@PathVariable Long id, @Valid @RequestBody Book bookDetails)
 			throws ResourceNotFoundException {
 
 		Book book = bookRepository.findById(id)
