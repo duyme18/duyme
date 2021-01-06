@@ -1,6 +1,6 @@
 package com.hoangducduy.duyme.models;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,12 +30,11 @@ public class Comment {
 	private String content;
 
 	@Column(name = "comment_date")
-	private LocalDate commentDate;
+	private LocalDateTime commentDate;
 
 	@Column(name = "is_edit")
 	private Boolean isEdit;
-
-
+	
     @ManyToOne
     @JoinColumn(name = "book_id")
     @EqualsAndHashCode.Exclude

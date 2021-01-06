@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hoangducduy.duyme.exception.ResourceNotFoundException;
+import com.hoangducduy.duyme.models.Author;
 import com.hoangducduy.duyme.models.Book;
+import com.hoangducduy.duyme.repository.AuthorRepository;
 import com.hoangducduy.duyme.repository.BookRepository;
 
 @CrossOrigin(origins = "*")
@@ -32,6 +34,9 @@ public class BookController {
 
 	@Autowired
 	private BookRepository bookRepository;
+	
+	@Autowired
+	private AuthorRepository authorRepository;
 
 	@GetMapping("books")
 	public List<Book> getAllBooks() {
@@ -107,5 +112,15 @@ public class BookController {
 		}
 		return new ResponseEntity<>(book1, HttpStatus.OK);
 
+	}
+	
+	@GetMapping("author/books/{id}")
+	public ResponseEntity<?> findByAuthor(@PathVariable Long id) throws ResourceNotFoundException {
+		Author author = authorRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Author not found for this id :: " + id));
+		
+		List<Book> books = bookRepository.findByAuthor(author);
+		
+		return ResponseEntity.ok().body(books);
 	}
 }

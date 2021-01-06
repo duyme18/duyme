@@ -53,6 +53,12 @@ public class Book {
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
+	private Collection<FileDB> fileDBs;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	private Collection<Comment> comments;
 
 	@ManyToOne

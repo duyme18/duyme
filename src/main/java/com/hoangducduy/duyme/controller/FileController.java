@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.hoangducduy.duyme.exception.ResourceNotFoundException;
+import com.hoangducduy.duyme.models.Book;
 import com.hoangducduy.duyme.models.FileDB;
 import com.hoangducduy.duyme.payload.response.MessageResponse;
 import com.hoangducduy.duyme.payload.response.ResponseFile;
+import com.hoangducduy.duyme.repository.BookRepository;
 import com.hoangducduy.duyme.service.FileStorageService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -29,6 +32,9 @@ public class FileController {
 
 	@Autowired
 	private FileStorageService storageService;
+
+	@Autowired
+	private BookRepository bookRepository;
 
 	@PostMapping("/upload")
 	public ResponseEntity<MessageResponse> uploadFile(@RequestParam("file") MultipartFile file) {
@@ -64,5 +70,15 @@ public class FileController {
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
 				.body(fileDB.getData());
+	}
+
+	@GetMapping("/book/files/{id}")
+	public ResponseEntity<?> findByBook(@PathVariable Long id) throws ResourceNotFoundException {
+		Book book = bookRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Book not found for this id :: " + id));
+
+		List<FileDB> fileDBs = storageService.findByBook(book);
+
+		return ResponseEntity.ok().body(fileDBs);
 	}
 }
