@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,15 +54,34 @@ public class CommentController {
 	}
 
 	@PostMapping("comment/{id}")
-	public ResponseEntity<Comment> addComment(@PathVariable Long id, @RequestBody Comment comment)throws ResourceNotFoundException {
-		Optional<Book> book = bookRepository.findById(id);
-				
+	public ResponseEntity<Comment> addComment(@PathVariable Long id, @RequestBody Comment comment)
+			throws ResourceNotFoundException {
+		Book book = bookRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Book not found for this id :: " + id));
+
 		LocalDateTime now = LocalDateTime.now();
 		comment.setIsEdit(false);
 		comment.setCommentDate(now);
-		comment.setBook(book.get());
+		comment.setBook(book);
 		commentRepository.save(comment);
 		return new ResponseEntity<>(comment, HttpStatus.CREATED);
+	}
+
+	@PutMapping("comment/{id}")
+	public ResponseEntity<Comment> updateComment(@PathVariable Long id, @RequestBody Comment commentDetails)
+			throws ResourceNotFoundException {
+
+		Comment comment = commentRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + id));
+
+		LocalDateTime now = LocalDateTime.now();
+		comment.setContent(commentDetails.getContent());
+		comment.setCommentDate(now);
+		comment.setIsEdit(true);
+
+		final Comment updateCommnet = commentRepository.save(comment);
+
+		return ResponseEntity.ok(updateCommnet);
 	}
 
 	@DeleteMapping("comment/{id}")
