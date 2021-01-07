@@ -1,8 +1,10 @@
 package com.hoangducduy.duyme.controller;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,9 +52,16 @@ public class CommentController {
 		return ResponseEntity.ok().body(comment);
 	}
 
-	@PostMapping("comment")
-	public Comment addComment(@RequestBody Comment comment) {
-		return commentRepository.save(comment);
+	@PostMapping("comment/{id}")
+	public ResponseEntity<Comment> addComment(@PathVariable Long id, @RequestBody Comment comment)throws ResourceNotFoundException {
+		Optional<Book> book = bookRepository.findById(id);
+				
+		LocalDateTime now = LocalDateTime.now();
+		comment.setIsEdit(false);
+		comment.setCommentDate(now);
+		comment.setBook(book.get());
+		commentRepository.save(comment);
+		return new ResponseEntity<>(comment, HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("comment/{id}")
