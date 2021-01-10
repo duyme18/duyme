@@ -1,6 +1,7 @@
 package com.hoangducduy.duyme.controller;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,8 +60,11 @@ public class CommentController {
 				.orElseThrow(() -> new ResourceNotFoundException("Book not found for this id :: " + id));
 
 		LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String date = now.format(formatter);
+        
 		comment.setIsEdit(false);
-		comment.setCommentDate(now);
+		comment.setCommentDate(date);
 		comment.setBook(book);
 		commentRepository.save(comment);
 		return new ResponseEntity<>(comment, HttpStatus.CREATED);
@@ -74,8 +78,11 @@ public class CommentController {
 				.orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + id));
 
 		LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String date = now.format(formatter);
+        
 		comment.setContent(commentDetails.getContent());
-		comment.setCommentDate(now);
+		comment.setCommentDate(date);
 		comment.setIsEdit(true);
 
 		final Comment updateCommnet = commentRepository.save(comment);

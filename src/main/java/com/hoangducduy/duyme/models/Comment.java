@@ -1,7 +1,5 @@
 package com.hoangducduy.duyme.models;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +28,7 @@ public class Comment {
 	private String content;
 
 	@Column(name = "comment_date")
-	private LocalDateTime commentDate;
+	private String commentDate;
 
 	@Column(name = "is_edit")
 	private Boolean isEdit;
