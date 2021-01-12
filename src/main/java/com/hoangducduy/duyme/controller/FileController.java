@@ -36,12 +36,17 @@ public class FileController {
 	@Autowired
 	private BookRepository bookRepository;
 
-	@PostMapping("/upload")
-	public ResponseEntity<MessageResponse> uploadFile(@RequestParam("file") MultipartFile file) {
+	@PostMapping("/upload/{id}")
+	public ResponseEntity<MessageResponse> uploadFile(@PathVariable Long id, @RequestParam("file") MultipartFile file)
+			throws ResourceNotFoundException {
+
+		Book book = bookRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Book not found for this id :: " + id));
+
 		String message = "";
 
 		try {
-			storageService.store(file);
+			storageService.store(book, file);
 
 			message = "Uploaded the file successfully: " + file.getOriginalFilename();
 			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
@@ -54,7 +59,7 @@ public class FileController {
 	@GetMapping("/files")
 	public ResponseEntity<List<ResponseFile>> getListFiles() {
 		List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
-			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/files/")
+			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/auth/files/")
 					.path(dbFile.getId()).toUriString();
 
 			return new ResponseFile(dbFile.getName(), fileDownloadUri, dbFile.getType(), dbFile.getData().length);

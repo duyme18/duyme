@@ -39,7 +39,14 @@ public class FileDB {
 		this.type = type;
 		this.data = data;
 	}
-	
+
+	public FileDB(String name, String type, byte[] data, Book book) {
+		this.name = name;
+		this.type = type;
+		this.data = data;
+		this.book = book;
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "book_id")
 	@EqualsAndHashCode.Exclude
