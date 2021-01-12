@@ -3,6 +3,7 @@ package com.hoangducduy.duyme.models;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,11 +25,19 @@ public class PublishingCompany {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
-	private String address;
+
+	@Column(name = "publishing_company_name")
+	private String publishingCompanyName;
+
+	@Column(name = "publishing_company_address")
+	private String publishingCompanyAddress;
+
+	@Column(name = "email")
 	private String email;
+
+	@Column(name = "information_representative")
 	private String informationRepresentative;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "publishingCompany", cascade = CascadeType.ALL)
 	@EqualsAndHashCode.Exclude
