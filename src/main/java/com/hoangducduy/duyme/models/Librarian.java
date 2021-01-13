@@ -31,6 +31,9 @@ public class Librarian {
 	@Column(name = "birthday")
 	private LocalDate birthday;
 	
+	@Column(name = "address")
+	private String address;
+	
 	@Column(name = "phone")
 	private String phone;
 	
