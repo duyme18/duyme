@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +27,8 @@ import lombok.ToString;
 @Data
 @Entity
 @Table(name = "book")
+@JsonInclude(value=Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Book {
 
 	@Id
@@ -48,6 +53,12 @@ public class Book {
 	@Lob
 	@Column(name = "book_description")
 	private String bookDescription;
+	
+	@Column(name = "file_name")
+	private String fileName;
+	
+	@Lob
+	private byte[] data;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
