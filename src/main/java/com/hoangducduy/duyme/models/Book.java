@@ -2,6 +2,7 @@ package com.hoangducduy.duyme.models;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,7 +49,7 @@ public class Book {
 	private Double rentConst;
 
 	@Column(name = "publishing_year")
-	private LocalDate publishingYear;
+	private Date publishingYear;
 
 	@Lob
 	@Column(name = "book_description")
