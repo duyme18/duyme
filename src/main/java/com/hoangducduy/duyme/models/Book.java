@@ -58,9 +58,6 @@ public class Book {
 	@Column(name = "file_name")
 	private String fileName;
 	
-	@Lob
-	private byte[] data;
-
 	@JsonIgnore
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
 	@EqualsAndHashCode.Exclude
