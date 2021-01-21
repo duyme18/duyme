@@ -1,5 +1,6 @@
 package com.hoangducduy.duyme.models;
 
+import java.sql.Date;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,11 +41,23 @@ public class User {
 	@Size(max = 20)
 	private String username;
 
+	private String fullName;
+	
 	@NotBlank
 	@Size(max = 50)
 	@Email
 	private String email;
-
+	
+	private String phoneNumber;
+	
+	private String address;
+	
+	private Date birthdate;
+	
+	private String sex;
+	
+	private String fileName;
+	
 	@NotBlank
 	@Size(max = 120)
 	private String password;

@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -129,19 +128,35 @@ public class HomeController {
 	}
 
 	@PutMapping("homes/{id}")
-	public ResponseEntity<Home> updateHome(@PathVariable("id") Long id, @RequestBody Home homeDetails)
-			throws ResourceNotFoundException {
+	public ResponseEntity<MessageResponse> updateHome(@PathVariable("id") Long id,
+			@RequestParam("file") MultipartFile file, @RequestParam("home") String home)
+			throws JsonParseException, JsonMappingException, Exception {
 		System.out.println("Update Home with ID = " + id + "...");
-		Home home = homeRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Home not found for this id :: " + id));
-		
-		home.setAddress(homeDetails.getAddress());
-		home.setCreateDate(homeDetails.getCreateDate());
-		home.setFileName(homeDetails.getFileName());
-		
-		final Home updateHome = homeRepository.save(home);
-		
-		return ResponseEntity.ok(updateHome);
+		Home home1 = new ObjectMapper().readValue(home, Home.class);
+		boolean isExists = new File(context.getRealPath("/Images/")).exists();
+		if (!isExists) {
+			new File(context.getRealPath("/Images/")).mkdir();
+			System.out.println("mk dir.............");
+		}
+		String filename = file.getOriginalFilename();
+		String newFileName = FilenameUtils.getBaseName(filename) + "." + FilenameUtils.getExtension(filename);
+		File serverFile = new File(context.getRealPath("/Images/" + File.separator + newFileName));
+		try {
+			System.out.println("Image");
+			FileUtils.writeByteArrayToFile(serverFile, file.getBytes());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		home1.setFileName(newFileName);
+		Home home2 = homeRepository.save(home1);
+
+		if (home2 != null) {
+			return new ResponseEntity<MessageResponse>(new MessageResponse(""), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<MessageResponse>(new MessageResponse("Home not saved"), HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@DeleteMapping("homes/{id}")
